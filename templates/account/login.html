@@ -1,0 +1,103 @@
+{% extends '_layout.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+<!-- css -->
+{% block css %}
+
+.mt--col{
+	margin-top:8em;
+	margin-bottom:2em;
+}
+
+.bck{
+	background-color:#ffffff
+}
+
+.sign-in-h4{
+	margin: 12px 0 .8em 0;
+    color: #5a5a5a;
+    font-style: normal;
+}
+
+.login-btn{
+	width:100%;
+	font-variant: petite-caps;
+	margin-bottom:.97em;
+}
+
+p{
+	display:inline-block;
+}
+
+.cpoy-right-text{
+	color: #b51212;
+    font-size: 12px;
+}
+
+.lock-icon{
+	text-align: center;
+    display: inherit;
+    height: 40px;
+    width: 40px;
+    margin: auto;
+    background: #b51212;
+    color: #fff;
+    line-height: 40px;
+    border-radius: 50%;
+    font-weight: bolder;
+    font-size: 21px;
+    margin-top: 10px;
+    box-sizing: border-box;
+}
+
+a{
+	color:#215184;
+}
+
+{% endblock %}
+<!-- /css -->
+
+<!-- navigation -->
+{% block nav %}
+	{% include 'partials/auth_nav.html' %}
+{% endblock %}
+<!-- /navigation -->
+
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 offset-md-0 col-sm-10 col-sm-1">
+      <div class="row">
+        <div class="col-lg-10 offset-lg-4 col-md-10 offset-md-4 col-sm-12 shadow-sm mt--col bck">
+          <i class="la la-lock lock-icon"></i>
+          <h4 class="text-center sign-in-h4">Sign in</h4>
+          <form method="post">
+          {% csrf_token %}
+            {{ form|crispy }}
+            <input type="hidden" name="next" value="{{ next }}">
+            <button type="submit" class="btn btn-primary login-btn">Sign In</button>
+          </form>
+          <div>
+            <p><a href="#">Forgot password?</a></p>
+            <p class="float-right">Don't have an account? <a href="{% url 'account:register' %}">Sign Up</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+  	<div class="col-lg-12 text-center">
+  		<p class="cpoy-right-text">Copyright &copy inQoire 2020.</p>
+      <p class="cpoy-right-text">Built with Python and 🙂 for programming by <a href="https://github.com/kraft99">Mike Edward.</a></p>
+  	</div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+
+
+{% endblock %}

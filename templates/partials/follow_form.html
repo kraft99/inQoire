@@ -1,0 +1,6 @@
+<form action="{% url 'connection:connection-switch' %}" method="POST" class="follow-form">
+	{% csrf_token %}
+	<input type="submit" class="btn btn-outline-primary follow-btn" value="Connect" name='follow_btn'/>
+	<input type="hidden" name="from_user" value="{{request.user.username}}">
+	<input type="hidden" name="to_user" value="{{user_obj.username}}">
+</form>
