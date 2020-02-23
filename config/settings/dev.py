@@ -27,4 +27,6 @@ DEFAULT_FROM_EMAIL = 'edward.mike@inQoire.com' # Eg. kraft.developer@gmail.com (
 
 ACCOUNT_EMAIL_SUBJECT_PREFIX = 'Email Subject'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # dev. only
+
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'emails')

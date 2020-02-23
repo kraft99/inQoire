@@ -57,7 +57,7 @@ class RegisterForm(UserCreationForm):
 	def clean_email(self):
 		email = self.cleaned_data.get('email',None)
 		try:
-			user_with_email = User.objects.get(email__iexact=email).lower()
+			user_with_email = User.objects.get(email__iexact=email.lower())
 		except User.DoesNotExist:
 			return email
 		# print('email exists')

@@ -1,16 +1,17 @@
 from django.conf import settings
 from django.contrib import messages
-from django.http import HttpResponse,Http404
+from django.http import HttpResponse,Http404,HttpResponseRedirect
 from django.utils.http import is_safe_url
-from django.contrib import auth
-from django.urls import reverse
-from django.shortcuts import redirect,get_object_or_404
+from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.template.response import TemplateResponse
 from django.shortcuts import render,redirect
+from django.contrib import auth
+from django.urls import reverse
 
 from inqoire.users.models import User as inQoireUser,Activation
+from inqoire.utils.decorators import unauthenticated
 from .auth import auth_credentials
 from .forms import LoginForm,RegisterForm
 
@@ -25,14 +26,26 @@ def logout(request):
 	return redirect('/')
 
 
+# Helper
+
+def is_post(request):
+	# checks POST request
+	return request.method == 'POST'
+
+
+def post_data(request):
+	# form(request.POST)
+	if is_post(request):
+		return request.POST
+	return None
+
+
 # register view
+@unauthenticated
 def register(request):
 	# TODO : Google Recapture.
-	current_user = request.user
-	if current_user.is_authenticated and current_user.is_active:
-		return redirect('/')
-	if request.method == 'POST':
-		form = RegisterForm(data=request.POST)
+	if is_post(request):
+		form = RegisterForm(data=post_data(request))
 		if form.is_valid():
 			email = form.cleaned_data.get('email')
 			form.save(request=request)
@@ -50,46 +63,40 @@ def register(request):
 
 
 # login view
+@unauthenticated
 def login(request):
-	# request.session['u'] = 'red'
-	current_user = request.user
-	if current_user.is_authenticated and current_user.is_active:
-		return redirect('/')
 	# session.
-	if request.method == 'POST':
+	if is_post(request):
 		next = request.GET.get('next')
-		form = LoginForm(data = request.POST)
+		form = LoginForm(data = post_data(request))
 		if form.is_valid():
 			username = form.cleaned_data['username']
 			password = form.cleaned_data['password']
-			# user = auth.authenticate(username=username,password=password)
 			user = None
 			try:
+				# user = auth.authenticate(username=username,password=password)
 				user = auth_credentials(username,password)
 			except:
 				pass
 			if not user is None and user.is_active:
-				# check for free subscription expiration.
 				if user.free_subscription_ended:
-					return HttpResponse('Sorry Your Free Subscription has ended. Subscribe with Credit Card 🙂')
-				# assume user is logged-in already but subscription has ended.Logout that user :)
+					response  = 'Sorry Your Free Subscription has ended. \
+								 Subscribe with Credit Card 🙂'
+					return HttpResponse(response)
 				if user.free_subscription_ended:
 					user.is_active = False
 					user.save()
 					auth.logout(request)
 					return redirect('/')
-				# print(user.free_subscription_ended)
 				auth.login(request,user)
 				if next:
-					# print(next)
 					redirect_path = next
 					is_a_safe_url = is_safe_url(url=redirect_path,
 						allowed_hosts=request.get_host(),
 						require_https=request.is_secure(),)
-					# print(request.is_secure()) # why not a secured request ? Google it !
 					if is_a_safe_url and redirect_path:
 						return redirect(redirect_path)
-					return redirect('/') #if not safe path
+					return redirect('/')
 				return redirect('/')
 			else:
 				print('failed to login user')

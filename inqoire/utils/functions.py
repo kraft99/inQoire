@@ -30,8 +30,8 @@ def activation_token():
 
 
 def viewed_by_session(request,answer_obj):
-	# handles post viewers counter -> use REDIS
-	session_key = 'viewed_topic_{}'.format(answer_obj.id)
+	# TODO : handles question-answer viewers counter -> use REDIS
+	session_key = 'viewed_{}'.format(answer_obj.id)
 	if not request.session.get(session_key,False):
 		answer_obj.views += 1
 		answer_obj.save()

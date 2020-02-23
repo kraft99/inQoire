@@ -1,6 +1,7 @@
 {% extends '_layout.html' %}
 {% load static %}
-{% load crispy_forms_tags %}
+{% load bootstrap4 %}
+
 
 <!-- css -->
 {% block css %}
@@ -55,6 +56,15 @@ a{
 	color:#215184;
 }
 
+.default-social-icon{
+    width: 28px;
+    height: 28px;
+    background: #fff;
+    line-height: 28px;
+    border-radius: 50%;
+    box-shadow: 1px 1px 2px 1px rgba(0,0,0,0.11);
+}
+
 {% endblock %}
 <!-- /css -->
 
@@ -73,12 +83,21 @@ a{
         <div class="col-lg-10 offset-lg-4 col-md-10 offset-md-4 col-sm-12 shadow-sm mt--col bck">
           <i class="la la-lock lock-icon"></i>
           <h4 class="text-center sign-in-h4">Sign Up</h4>
-          <form method="post">
-          {% csrf_token %}
-            {{ form|crispy }}
+          <form method="POST">
+            {% bootstrap_form form %}
+            {% csrf_token %}
             <input type="hidden" name="next" value="{{ next }}">
             <button type="submit" class="btn btn-primary login-btn">Sign Up</button>
           </form>
+          <section class="col-lg-12 text-center">
+            <p> Get Authenticated with</p>
+            <section class="col-lg-12">
+             <p class="default-social-icon"><a href="#"><i class="la la-facebook"></i></a></p> 
+             <p class="default-social-icon"><a href="#" style="color: #20afc4;"><i class="la la-twitter"></i></a></p>  
+             <p class="default-social-icon"><a href="#" style="color: #d61529;"><i class="la la-google"></i></a></p>  
+            </section>
+          </section>
+
           <div>
             <p><a href="#">Forgot password?</a></p>
             <p class="float-right">Have an account here? <a href="{% url 'account:login' %}">Sign In</a></p>

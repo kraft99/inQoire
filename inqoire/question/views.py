@@ -10,10 +10,13 @@ from inqoire.utils.decorators import ajax_required
 from inqoire.question.models import Question
 from inqoire.users.models import User as inQoireUser
 from inqoire.question.forms import QuestionForm
+# from inqoire.utils.decorators import superuser_required
+
 # Create your views here.
 
 
 @login_required
+# @superuser_required
 def question_page(request):
 	qform = QuestionForm()
 	if request.method == 'POST':

@@ -1,10 +1,13 @@
 # @purpose - App handles inQoire Answers *
+from django.contrib.humanize.templatetags.humanize import naturaltime
 from inqoire.utils.helpers import file_answer_loc
 from django.conf import settings
 from django.urls import reverse
+from django.db.models import Q
 from django.db import models
 
 from inqoire.question.models import Question
+
 
 
 class Answer(models.Model):
@@ -35,6 +38,7 @@ class Answer(models.Model):
 	updated 		= models.DateTimeField(auto_now=True)
 
 
+
 	class Meta:
 		ordering 	 = (('upvotes'),)
 		verbose_name = 'Answer'
@@ -52,7 +56,6 @@ class Answer(models.Model):
 
 
 	def save(self,*args,**kwargs):
-		print('answer.save() called')
 		from django.utils.text import slugify
 		if not self.slug:
 			if not self.answer_by is None:
@@ -76,6 +79,12 @@ class Answer(models.Model):
 		if self.answered_on:
 			return self.answered_on.strftime('%d %b')
 		return
+
+
+	def human_readable_timestamp(self):
+		return humanize(self.created)
+
+	timestamp = property(human_readable_timestamp)
 
 
 	@property

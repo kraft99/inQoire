@@ -13,7 +13,11 @@ from inqoire.answer.forms import AnswerAddForm
 
 def welcome_to_inqoire(request,**kwargs):
 	
-	question_qs = Question.objects.all()[:4]#TODO Filter by Most Answered
+	# Manager for Question.objects.all()
+	# all() - displays questions with answers .
+	question_qs = Question.objects.all()
+	# print(question_qs.first())
+
 	# Forms.
 	ctx = dict()
 	ctx['vote_form'] = VoteForm()

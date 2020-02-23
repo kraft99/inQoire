@@ -11,5 +11,5 @@ from inqoire.answer.models import Answer
 
 
 
-def vote(request,id):
-	return HttpResponse(id)
+def vote(request):
+	return HttpResponse('vote on most accepted answer.')

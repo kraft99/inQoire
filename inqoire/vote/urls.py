@@ -5,6 +5,6 @@ from .import views
 app_name = 'vote'
 
 urlpatterns = [
-    path('user-vote/<int:id>/',views.vote,name='user-vote'),
+    path('user-vote/',views.vote,name='user-vote'),
 ]
 

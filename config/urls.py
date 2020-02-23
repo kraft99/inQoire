@@ -37,9 +37,8 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
-if settings.DEBUG:
-    # just for debugged erro pages during development.
+    
+    # Test Dev. Error Pages
     urlpatterns += [
         path('400/', default_views.bad_request, kwargs={'exception': Exception('Bad Request!')}),
         path('403/', default_views.permission_denied, kwargs={'exception': Exception('Permission Denied')}),

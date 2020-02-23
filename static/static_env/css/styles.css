@@ -336,6 +336,7 @@ ul li a.active-link{
 
 .aside-card{
     border: none;
+    max-height: 550px !important;
 }
 
 .avatar-aside{
@@ -389,7 +390,7 @@ ul li a.active-link{
 /*Profile*/
 
 .card-height-profile{
-    max-height: 194px !important;
+    max-height: 210px !important;
 }
 
 .follow-form{

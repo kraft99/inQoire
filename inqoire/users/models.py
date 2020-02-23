@@ -25,6 +25,7 @@ class User(AbstractUser):
     score   		            = models.PositiveSmallIntegerField(default=0,blank=True,null=True)
     phone_number                = models.CharField(max_length=16,blank=False,null=True,unique=True)
     joined_from_ip              = models.GenericIPAddressField(blank=True,null=True)
+    last_seen_ip                = models.GenericIPAddressField(blank=True,null=True)
     activated_on                = models.DateTimeField(blank=True,null=True) # date account was activated after mail was sent.
     free_subscription_ends_on   = models.DateTimeField(blank=True,null=True) # set 1 month of site use,like its done on medium.com
  

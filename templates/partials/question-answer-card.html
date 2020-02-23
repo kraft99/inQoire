@@ -2,106 +2,113 @@
 {% load crispy_forms_tags %}
 					<!-- card starts here -->
 					{% if questions %}
-					{% for q in questions %}
-						{% if is_auth %}
-								<div class="card col-lg-12">
-										 <div class="card-body">
-										   	<form action="{% url 'answer:answer-add'%}" method="POST" class="answer-form" enctype="multipart/form-data">
-										   		{% csrf_token %}
-										   		{{answer_form|crispy}}
-										   		<input type="hidden" name="question_id" value="{{q.id}}">
-										   		<button class="btn btn-outline-primary link-btn">Send</button>
-										   		<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-										   	</form>
-										 </div>
-								</div>
-						{% endif %}
-					<div class="card mb-4" style="width: -webkit-fill-available !important;"> 
-						  	  <section class="card-header clear-fix">
-						  	  	{% if q.most_upvote_answer.answer_by.profile.pic %}
-						  	  	<img src="{{q.asked_by.profile.pic_url}}" alt="" class="avatar-qs" />
-						  	  	{% else %}
-						  	  	<img src="{% static 'img/avatar-1.png' %}" alt="" class="avatar-qs" />
-						  	  	{% endif %}
-						  	  	{% if q.text %}
-							    <h5 class="card-title">
-							    	{{q.text}}
-							    </h5>
-							    {% endif %}
-						  	  	<p><a href="{{q.asked_by.url}}">{{q.asked_by.full_name}}</a>
-						  	  		{% if q.asked_by.profile.profession %}{{q.asked_by.profile.profession}}{% endif %}.
-						  	  		<span class="answer-dt">Answered {{q.most_upvote_answer.pretty_date}}</span>
-						  	  	</p>
-						  	  	<p class="question-answers-count">({{q.answers_count}}) Answers provided.</p>
-							  </section>
-							    <!-- <img src="{% static 'img/qf.jpeg' %}" class="card-img-top question-file" alt="..."> -->
-							    <div class="card-body clear-fix	">
-							      <i class="la la-check float-left"></i>
-							      <p class="card-text">
-							      	{% if q.most_upvote_answer.file %}
-							      	<a href="{{q.most_upvote_answer.url}}">
-							      	<img src="{{q.most_upvote_answer.file_url}}" alt="" class="answer-file-resp">
-							        </a>
-							      	{% endif %}
-							      	<p>
-							      	<a href="{{q.most_upvote_answer.url}}" class="answer-link"class="answer-link">{{q.most_upvote_answer.text}}</a>
-							        </p>
-							      <!-- <button class="read-more-btn">Read More</button> -->
-							      </p>
-							    </div>
-							    <div class="card-footer clear-fix">
-							      <small class="text-muted qs-text">
-							      {{q.most_upvote_answer.upvotes}} upvote{{q.most_upvote_answer.upvotes|pluralize}}
-							  	  </small>
-							      <small class="text-muted qs-text comment-small">
-							      <span class="count-comment">{{q.most_upvote_answer.answer_comments_count}}</span> comment{{q.most_upvote_answer.answer_comments_count|pluralize}}
-							      </small>
-							      <!-- <small class="text-muted qs-text">4 shares</small> -->
-							      <small class="text-muted qs-text">
-							      {{q.most_upvote_answer.downvotes}} downvote{{q.most_upvote_answer.downvotes|pluralize}}
-							  	 </small>
-							      <small class="text-muted qs-text">{{q.most_upvote_answer.views}} view{{q.most_upvote_answer.views|pluralize}}</small>
-							      <small class="text-muted float-right"><i class="la la-ellipsis-h"></i></small>
-							    </div>
-							    <div class="divider"></div>
-							    <div class="container-fluid">
-							    	<div class="row mt-1 mb-1">
-							    		<div class="col-lg-12">
-							    				<form action="{% url 'vote:user-vote' q.most_upvote_answer.id  %}" method="POST" class="vote-form">
-							    					{% csrf_token %}
-							    					{{vote_form}}
-							    				</form>
-							    				<span class="comment-action">
-							    					<i class="la la-comments"></i>
-							    					Comments
-							    				</span>
-							    				<!-- <span>
-							    					Share
-							    				</span> -->
-							    		</div>
-							    	</div>
-							    	{% if is_auth %}
-							    	<div class="row mt-3 mb-3">
-							    		<div class="col-lg-2 col-md-2 col-sm-2">
-							    			{% if request.user.profile.pic %}
-							    			<img src="{{request.user.profile.pic_url}}" class="rsp-avatar" alt=""/>
-							    			{% else %}
-							    			<img src="{% static 'img/avatar.jpg' %}" alt="" class="rsp-avatar" />
-							    			{% endif %}
-							    		</div>
-							    		<div class="col-lg-10 col-md-10 col-sm-10">
-								    		<form action="{% url 'comment:comment-post' %}" method="POST" class="comment-form">
-								    			{% csrf_token %}
-								    			<input type="text" name="comment" placeholder="add a comment..." class="comment-input">
-								    			<input type="hidden" name="answer-comment" value="{{q.most_upvote_answer.id}}">
-								    			<!-- loader -->
-								    			<span class="loader-span">posting...</span>
-								    		</form>
-							    		</div>
-							    	</div>
-							    	{% endif %}
-							    </div>
-						  </div>
-						  {% endfor %}
+							{% for q in questions %}
+								{% if is_auth %}
+										<div class="card col-lg-12">
+												 <div class="card-body">
+												   	<form action="{% url 'answer:answer-add'%}" method="POST" class="answer-form" enctype="multipart/form-data">
+												   		{% csrf_token %}
+												   		{{answer_form|crispy}}
+												   		<input type="hidden" name="question_id" value="{{q.id}}">
+												   		<button class="btn btn-outline-primary link-btn">Send</button>
+												   		<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+												   	</form>
+												 </div>
+										</div>
+								{% endif %}
+							<div class="card mb-4" style="width: -webkit-fill-available !important;"> 
+								  	  <section class="card-header clear-fix">
+								  	  	{% if q.most_upvote_answer.answer_by.profile.pic %}
+								  	  	<img src="{{q.asked_by.profile.pic_url}}" alt="" class="avatar-qs" />
+								  	  	{% else %}
+								  	  	<img src="{% static 'img/avatar-1.png' %}" alt="" class="avatar-qs" />
+								  	  	{% endif %}
+								  	  	{% if q.text %}
+									    <h5 class="card-title">
+									    	{{q.text}}
+									    </h5>
+									    {% endif %}
+								  	  	<p>By <a href="{{q.asked_by.url}}">{{q.asked_by.full_name}}</a>
+								  	  		{% if q.asked_by.profile.profession %}
+								  	  		{{q.asked_by.profile.profession}}{% endif %}.
+								  	  		<span class="answer-dt"> answered by 
+								  	  			<a href="{{q.most_upvote_answer.answer_by.url}}">{{q.most_upvote_answer.answer_by}}</a>
+								  	  		</span>
+								  	  	</p>
+								  	  	<p class="question-answers-count"><a href="#">({{q.answers_count}})</a> Answer{{q.answers_count|pluralize}} provided for this question.</p>
+									  </section>
+									    <!-- <img src="{% static 'img/qf.jpeg' %}" class="card-img-top question-file" alt="..."> -->
+									    <div class="card-body clear-fix	">
+									      <i class="la la-check float-left"></i>
+									      <p class="card-text">
+									      	{% if q.most_upvote_answer.file %}
+									      	<a href="{{q.most_upvote_answer.url}}">
+										      		<img src="{{q.most_upvote_answer.file_url}}" alt="" class="answer-file-resp">
+									        </a>
+										    {% elif q.file_url %}
+										    <a href="{{q.most_upvote_answer.url}}">
+									      		<img src="{{q.file_url}}" alt="" class="answer-file-resp">
+									      	</a>
+									      	{% endif %}
+									      	<p>
+									      	<a href="{{q.most_upvote_answer.url}}" class="answer-link"class="answer-link">{{q.most_upvote_answer.text}}</a>
+									        </p>
+									      <!-- <button class="read-more-btn">Read More</button> -->
+									      </p>
+									    </div>
+									    <div class="card-footer clear-fix">
+									      <small class="text-muted qs-text">
+									      {{q.most_upvote_answer.upvotes}} upvote{{q.most_upvote_answer.upvotes|pluralize}}
+									  	  </small>
+									      <small class="text-muted qs-text comment-small">
+									      <span class="count-comment">{{q.most_upvote_answer.answer_comments_count}}</span> comment{{q.most_upvote_answer.answer_comments_count|pluralize}}
+									      </small>
+									      <!-- <small class="text-muted qs-text">4 shares</small> -->
+									      <small class="text-muted qs-text">
+									      {{q.most_upvote_answer.downvotes}} downvote{{q.most_upvote_answer.downvotes|pluralize}}
+									  	 </small>
+									      <small class="text-muted qs-text">{{q.most_upvote_answer.views}} view{{q.most_upvote_answer.views|pluralize}}</small>
+									      <small class="text-muted float-right"><i class="la la-ellipsis-h"></i></small>
+									    </div>
+									    <div class="divider"></div>
+									    <div class="container-fluid">
+									    	<div class="row mt-1 mb-1">
+									    		<div class="col-lg-12">
+									    				<form action="{% url 'vote:user-vote'%}" method="POST" class="vote-form">
+									    					{% csrf_token %}
+									    					{{vote_form}}
+									    				</form>
+									    				<span class="comment-action">
+									    					<i class="la la-comments"></i>
+									    					Comments
+									    				</span>
+									    				<!-- <span>
+									    					Share
+									    				</span> -->
+									    		</div>
+									    	</div>
+									    	{% if is_auth %}
+									    	<div class="row mt-3 mb-3">
+									    		<div class="col-lg-2 col-md-2 col-sm-2">
+									    			{% if request.user.profile.pic %}
+									    			<img src="{{request.user.profile.pic_url}}" class="rsp-avatar" alt=""/>
+									    			{% else %}
+									    			<img src="{% static 'img/avatar.jpg' %}" alt="" class="rsp-avatar" />
+									    			{% endif %}
+									    		</div>
+									    		<div class="col-lg-10 col-md-10 col-sm-10">
+										    		<form action="{% url 'comment:comment-post' %}" method="POST" class="comment-form">
+										    			{% csrf_token %}
+										    			<input type="text" name="comment" placeholder="add a comment..." class="comment-input">
+										    			<input type="hidden" name="answer-comment" value="{{q.most_upvote_answer.id}}">
+										    			<!-- loader -->
+										    			<span class="loader-span">posting...</span>
+										    		</form>
+									    		</div>
+									    	</div>
+									    	{% endif %}
+									    </div>
+								  </div>
+								  {% endfor %}
 						  {% endif %}
 						<!-- card close here -->

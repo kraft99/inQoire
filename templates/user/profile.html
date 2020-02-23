@@ -27,6 +27,12 @@
 	display:none !important;
 }
 
+.edit-href{
+	font-size: 19px;
+    margin: 4px 3px 4px 0;
+    color: #9c9c9c;
+}
+
 {% endblock %}
 <!-- /css -->
 
@@ -49,12 +55,11 @@
 					  <img src="{% static 'img/avatar.jpg' %}" class="card-img-top avatar-aside" alt="...">
 					  {% endif %}
 					  <div class="card-body card-body-height card-height-profile text-center">
-					    <h5 class="card-title card-title-h5"><a href="{{request.user.url}}">{{ user_obj.full_name }}</a></h5>
+					    <h5 class="card-title card-title-h5"><a href="{{request.user_obj.url}}">{{ user_obj.full_name }}</a></h5>
 					    <h6 class="card-title">
 					    	<a href="{{user_obj.url}}">{{user_obj.user_username}}</a>
 					    </h6>
 					    <!-- Test -->
-					    <p>Got a project idea?<br>send me a <a href="mailto:edward.mike.anaryo@gmail.com">mail</a></p>
 					    <!-- /Test -->
 					    {% if is_auth %}
 					     {% ifnotequal request.user user_obj %}
@@ -69,12 +74,18 @@
 					    {% endif %}
 					  </div>
 					  <ul class="list-group list-group-flush clear-fix">
-					    <li class="list-group-item">Contribution{{user_obj.contribs.count|pluralize}}<span class="badge badge-light float-right user-contrib-count">{{user_obj.contribs.count}}</span></li>
-					    <li class="list-group-item">Question{{user_obj.questions.count|pluralize}}<span class="badge badge-light float-right user-question-count">{{user_obj.questions.count}}</span></li>
-					    <li class="list-group-item">Connection{{user_obj.people_connected_to_count|pluralize}}<span class="badge badge-light float-right connect-count">{{user_obj.people_connected_to_count}}</span></li>
-
+					    <li class="list-group-item">Contribution{{user_obj.contribs.count|pluralize}}<span class="badge badge-light float-right user-contrib-count">{{user_obj.contribs.count}}</span>
+					    </li>
+					    <li class="list-group-item">Question{{user_obj.questions.count|pluralize}}<span class="badge badge-light float-right user-question-count">{{user_obj.questions.count}}</span>
+					    </li>
+					    <li class="list-group-item">Connection{{user_obj.people_connected_to_count|pluralize}}<span class="badge badge-light float-right connect-count">{{user_obj.people_connected_to_count}}</span>
+					    </li>
 					  </ul>
-					  <!-- {{answer_form}} -->
+					  <!-- 	{% ifequal request.user user_obj %}
+					  		<section class="col-lg-12">
+					  			<a href="{% url 'users:edit-profile' user_obj.username %}" title="edit profile" class="edit-href"><i class="la la-edit"></i></a>
+					  		</section>
+					  	{% endifequal %} -->
 				</div>
 				<!-- / card 1 -->
 			<!-- </section> -->
@@ -104,18 +115,15 @@
 				<section class="col-lg-12">
 					<section class="row">
 						  <section class="col-lg-12">
-						  	<p><b class="text-center">NOTE : This Exercise Work is still under Development(i will be working on this during the weekends).</b></p>
-						  	<p><b class="text-center">Adding Question(button disabled) and Vote not implemented yet,<br>got some few Bugs to Fix.</b></p>
+						  	<section class="row">
+						  		<section class="col-lg-5">
+						  			Left
+						  		</section>
+						  		<section class="col-lg-7">
 
-						  	<p><b class="text-center">Working Now :Account(login with username,email,phone number and password,logout,activation and free subscription expires after 1 month),Ajaxified (Comments,Answers,Connect to people),rank algorithm implemented for best answers ...</b></p>
-
-							  <p>Hi,<br>
-							  I am Mike Edward,a Full Stack (<b>Python & Ruby</b>) Web <b>Developer</b>.<br>
-							  This is <b>a 1 week attempt</b> to create <b><a href="https://qoura.com/" target="_blank">qoura.com</a></b><br>
-							  <b>I build all my Frontends(UI's) from scratch</b>,<br>you might not know what bugs exists in ready made templates.<br>
-							  You can find the source code <a href="">here</a>.<br>
-							  Thank You and have a Happy New Year 🙂.
-							  </p>
+						  			Right
+						  		</section>
+						  	</section>
 						  </section>
 					</section>
 				</section>

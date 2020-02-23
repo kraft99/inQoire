@@ -22,6 +22,7 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     'crispy_forms',
+    'bootstrap4',
 
 ]
 
@@ -45,6 +46,8 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'inqoire.account.middleware.RestrictUserToAdminRouteMiddleware',
+    'inqoire.account.middleware.LastIPMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -148,7 +151,7 @@ RANDOM_AVATAR_PATH = os.path.join(MEDIA_ROOT,'random_avatars')
 
 
 # inQoire config. for account activate
-# True - Activation will be required
+# True - Email Activation will be required
 ALLOW_CONFIRMATION = False
 
 
