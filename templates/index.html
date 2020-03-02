@@ -1,6 +1,5 @@
 {% extends '_layout.html' %}
 {% load static %}
-
 <!-- css -->
 {% block css %}
 
@@ -67,12 +66,14 @@
 					  {% else %}
 					  <img src="{% static 'img/avatar.jpg' %}" class="card-img-top avatar-aside" alt="...">
 					  {% endif %}
+					  
 					  <div class="card-body card-body-height">
 					    <h5 class="card-title card-title-h5 text-center"><a href="{{request.user.url}}">{{ request.user.full_name }}</a></h5>
 					    <h6 class="card-title text-center"><a href="{{request.user.url}}">{{request.user.user_username}}</a></h6>
 					    <!-- <h6 class="card-title text-center">ID : #Gy50oGh</h6> -->
 					    <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
 					  </div>
+
 					  <ul class="list-group list-group-flush clear-fix">
 					    <li class="list-group-item">Contribution{{request.user.contribs.count|pluralize}}<span class="badge badge-light float-right">{{request.user.contribs.count}}</span></li>
 					    <li class="list-group-item">Question{{request.user.questions_count|pluralize}}<span class="badge badge-light float-right">{{request.user.questions_count}}</span></li>
@@ -137,7 +138,7 @@
 		</section>
 		<section class="row">
 			<section class="col-lg-12 mt-4 text-center">
-								<p class="cpoy-right-text">Copyright &copy inQoire 2020</p>
+								<p class="cpoy-right-text">Copyright &copy {%if message %}{{message}}{% endif %} inQoire 2020</p>
 								<p class="cpoy-right-text">Built with Python and 🙂 for programming by
 									<a href="https://github.com/kraft99"> Mike Edward.</a></p>
 			</section>

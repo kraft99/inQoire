@@ -6,6 +6,9 @@ from django import forms
 # test celery task
 from inqoire.task.test import test_count
 
+from .validators import (validate_username_in_db,
+						validate_email_in_db,
+						validate_phone_number_in_db)
 from inqoire.utils.ip import visitor_ip_address
 from inqoire.users.models import User,Activation
 
@@ -24,9 +27,20 @@ class LoginForm(forms.Form):
 
 
 class RegisterForm(UserCreationForm):
-	email 	   	 = forms.EmailField(label='Email',required=True,widget=forms.EmailInput())
-	phone_number = forms.CharField(label="Phone Number",required=True,widget=forms.TextInput())
-	username     	= forms.CharField(label="username",required=True,widget=forms.TextInput())
+	email 	   	 = forms.EmailField(label='Email',
+									required=True,
+									validators=[validate_email_in_db],
+									widget=forms.EmailInput())
+
+	phone_number = forms.CharField(label="Phone Number",
+									required=True,
+									validators=[validate_phone_number_in_db],
+									widget=forms.TextInput())
+
+	username     	= forms.CharField(label="username",
+									required=True,
+									validators=[validate_username_in_db],
+									widget=forms.TextInput())
 
 
 	def __init__(self,*args,**kwargs):

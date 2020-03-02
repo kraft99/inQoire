@@ -4,6 +4,8 @@ from .models import User,Profile,Activation
 
 admin.site.register(User,
 					list_display=[
+					'username',
+					'email',
 					'score',
 					'phone_number',
 					'joined_from_ip',

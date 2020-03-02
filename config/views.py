@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 from django.contrib.auth.decorators import login_required
 
@@ -18,8 +19,37 @@ def welcome_to_inqoire(request,**kwargs):
 	question_qs = Question.objects.all()
 	# print(question_qs.first())
 
-	# Forms.
+	
+	# response = redirect('index')
+	# print(response) 
+	# access_token = 'test_access_token'
+	# response.set_cookie('access_token',access_token,max_age=1000, httponly=True)
+
+	# if request.session.get('username',None):
+	# 	print(request.session['username'])
+
+
+
+	# print(hasattr(request,'user'))
+	# print(request.user)
+
+
+	# session_key = 'seesion test'
+	# if not request.session.get(session_key,False):
+	# 	print('am called only ones')
+	# 	request.session[session_key] = True
+	
 	ctx = dict()
+
+	if request.session.get('message',False):
+		ctx['message'] = request.session.get('message',False)
+		# use a modal dialog to show message ` Welcome to inQoire`
+		# message should be displayed only one's for every new user account.
+		print('welcome message')
+
+
+	# Forms.
+	
 	ctx['vote_form'] = VoteForm()
 	ctx['answer_form'] = AnswerAddForm(initial={'answer_by':request.user})
 

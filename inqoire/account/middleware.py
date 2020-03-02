@@ -23,7 +23,7 @@ class RestrictUserToAdminRouteMiddleware(MiddlewareMixin):
         		if not (request.user.is_superuser or request.user.is_staff):
         			raise Http404()
         		else:
-        			pass
+        			return
         	else:
         		raise Http404()
         
@@ -41,7 +41,7 @@ class LastIPMiddleware(MiddlewareMixin):
         if request.user.last_seen_ip == last_ip:
             return
 
-        # set new ip for users
+        # set new ip for user
         (models.User._default_manager
             .filter(pk=request.user.pk)
             .update(last_seen_ip=last_ip))

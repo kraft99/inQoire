@@ -6,16 +6,21 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.template.response import TemplateResponse
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.debug import sensitive_post_parameters
 from django.shortcuts import render,redirect
 from django.contrib import auth
 from django.urls import reverse
 
+from inqoire.account import is_post,post_data
 from inqoire.users.models import User as inQoireUser,Activation
 from inqoire.utils.decorators import unauthenticated
-from .auth import auth_credentials
+# from .auth import auth_credentials
 from .forms import LoginForm,RegisterForm
 
 User = get_user_model()
+
 
 
 
@@ -28,27 +33,31 @@ def logout(request):
 
 # Helper
 
-def is_post(request):
-	# checks POST request
-	return request.method == 'POST'
+# def is_post(request):
+# 	# checks POST request
+# 	return request.method == 'POST'
 
 
-def post_data(request):
-	# form(request.POST)
-	if is_post(request):
-		return request.POST
-	return None
+# def post_data(request):
+# 	# form(request.POST)
+# 	if is_post(request):
+# 		return request.POST
+# 	return None
 
 
 # register view
 @unauthenticated
-def register(request):
+def register(request,template='account/register.html',**kwargs):
 	# TODO : Google Recapture.
+	form = RegisterForm()
 	if is_post(request):
 		form = RegisterForm(data=post_data(request))
 		if form.is_valid():
 			email = form.cleaned_data.get('email')
 			form.save(request=request)
+			# session message 
+			request.session['message'] = True
+
 			ALLOW_CONFIRMATION = getattr(settings,'ALLOW_CONFIRMATION',False)
 			if ALLOW_CONFIRMATION:
 				# for production settings.
@@ -56,15 +65,18 @@ def register(request):
 			return redirect('account:login')
 			# allow users to login.
 		else:
-			print('invalid form')
-	form = RegisterForm()
-	return TemplateResponse(request,'account/register.html',{'form':form})
+			pass
+	return TemplateResponse(request,template,{'form':form})
 
 
 
 # login view
+@sensitive_post_parameters()
+@never_cache
+@csrf_protect
 @unauthenticated
 def login(request):
+	print(request.session.get('message',False))
 	# session.
 	if is_post(request):
 		next = request.GET.get('next')
@@ -74,21 +86,25 @@ def login(request):
 			password = form.cleaned_data['password']
 			user = None
 			try:
-				# user = auth.authenticate(username=username,password=password)
-				user = auth_credentials(username,password)
+				user = auth.authenticate(username=username,password=password)
+				# user = auth_credentials(username,password)
 			except:
 				pass
 			if not user is None and user.is_active:
 				if user.free_subscription_ended:
-					response  = 'Sorry Your Free Subscription has ended. \
+					mssg  = 'Sorry Your Free Subscription has ended. \
 								 Subscribe with Credit Card 🙂'
-					return HttpResponse(response)
+					# messages.add_message(request,messages.INFO,mssg)
+					# return redirect('account:login')
+					return HttpResponse(mssg)
 				if user.free_subscription_ended:
 					user.is_active = False
 					user.save()
 					auth.logout(request)
 					return redirect('/')
 				auth.login(request,user)
+				request.session['username'] = user.username
+
 				if next:
 					redirect_path = next
 					is_a_safe_url = is_safe_url(url=redirect_path,
@@ -99,10 +115,14 @@ def login(request):
 					return redirect('/')
 				return redirect('/')
 			else:
-				print('failed to login user')
+				mssg = 'Invalid user credentials,\
+					please check your username or password.'
+				messages.add_message(request,messages.ERROR,mssg)
 				return redirect('account:login')
 		else:
-			print('invalid data')
+			mssg = 'Invalid user credentials,\
+					please check your username or password.'
+			messages.add_message(request,messages.ERROR,mssg)
 			return redirect('account:login')
 	form = LoginForm()
 	return TemplateResponse(request,'account/login.html',{'form':form})

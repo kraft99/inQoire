@@ -1,7 +1,14 @@
+
+from django.conf import settings
 from django.http import HttpResponseBadRequest
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from inqoire.utils.exceptions import PermissionDeniedError
 from django.contrib.auth.decorators import user_passes_test
+
+# try this imports
+from django.contrib.auth.views import redirect_to_login
+from functools import wraps
+
 from inqoire.users.models import User as inQoireUser
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -18,6 +25,20 @@ def ajax_required(f):
     wrap.__doc__ = f.__doc__
     wrap.__name__ = f.__name__
     return wrap
+
+
+def is_authenticated_user(view_func):
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        user = request.user
+
+        if not user.is_authenticated:
+            return redirect_to_login(next=request.get_full_path(),
+                                     login_url=settings.LOGIN_URL)
+        return view_func(request, *args, **kwargs)
+
+    return wrapper
+
 
 
 
@@ -84,8 +105,19 @@ def owner_required(f):
 
 def unauthenticated(f):
 	'''
-	@ decorator - redirects authenticated users to index route on page load 
-	or login rout for un-auth users
+	This decorator minimises codes written in views to redirect authenticated user to home page
+
+	BEFORE
+	def view_fun(request):
+		if request.user.is_authenticated:
+			return redirect(reverse('index'))
+
+	NOW
+
+	@unauthenticated
+	def view_fun(request):
+		pass
+
 	'''
 	def wrap(request,*args,**kwargs):
 		if request.user.is_authenticated and request.user.is_active:
@@ -97,3 +129,15 @@ def unauthenticated(f):
 	wrap.__name__ = f.__name__
 	return wrap
 
+
+
+def guest_only(view_func):
+    # TODO: test!
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect(request.GET.get('next', request.user.st.get_absolute_url()))
+
+        return view_func(request, *args, **kwargs)
+
+    return wrapper

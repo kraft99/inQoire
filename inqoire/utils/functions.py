@@ -2,7 +2,8 @@ import os
 import uuid
 
 import datetime
-from dateutil.relativedelta import relativedelta
+from django.conf import settings
+# from dateutil.relativedelta import relativedelta
 
 from django.utils.text import Truncator
 from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
@@ -16,10 +17,13 @@ def question_summary(text):
 	return
 
 
-EXPIRE_ACTIVATION_WEEKS = 1
+# def date_expired(now = datetime.datetime.now()):
+# 	return now + relativedelta(weeks = EXPIRE_ACTIVATION_WEEKS)
+
+
 
 def date_expired(now = datetime.datetime.now()):
-	return now + relativedelta(weeks = EXPIRE_ACTIVATION_WEEKS)
+	return now + datetime.timedelta(days=getattr(settings,'EXPIRE_ACTIVATION_DAYS',7))
 
 
 def activation_token():
@@ -31,8 +35,14 @@ def activation_token():
 
 def viewed_by_session(request,answer_obj):
 	# TODO : handles question-answer viewers counter -> use REDIS
+
+	# sert session key in session
 	session_key = 'viewed_{}'.format(answer_obj.id)
+	# retrieve session key
 	if not request.session.get(session_key,False):
+		# session not found then
+		# perform this action and set this session.
+		# this is done only ones
 		answer_obj.views += 1
 		answer_obj.save()
 		request.session[session_key] = True

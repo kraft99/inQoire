@@ -12,6 +12,7 @@ from django.db import models
 
 from inqoire.utils.functions import activation_token,date_expired
 # from inqoire.connection.models import Connection
+from inqoire.account import build_absolute_uri
 from inqoire.utils import helpers
 
 
@@ -157,24 +158,34 @@ class Activation(models.Model):
                                   expired=date_expired(),
                                   is_sent=True)
 
-        
 
     def send(self,request = None):
-        if request is None:
-            return
+        '''@method - send activation email'''
+        if request is not None:
+            domain = get_current_site(request).domain
 
-        domain = get_current_site(request).domain
-        link_url = 'http://{0}/account/auth/user-activation/{1}/'.format(domain,self.token)
-        subject = 'inQoire Account Activation'
-        message = "click {1} to activate account".format(domain,link_url)
-        from_email = settings.DEFAULT_FROM_EMAIL
-        to_email = self.user.email
+            # get activation route full path.
+            full_activation_url = build_absolute_uri(
+                reverse(
+                    'account:validate-token',
+                    kwargs={'token':self.token}
+                ),
+                request
+            )
+            # print(full_activation_url)
+            subject = 'Account Activation Confirmation.'
+            message = "To activate {0} account for email {1} click on this link {2}".format(domain,
+                self.user.email,
+                full_activation_url)
+            from_email = settings.DEFAULT_FROM_EMAIL
+            to_email = self.user.email
 
-        try:
-            # print('email sent')
-            send_mail(subject,message,from_email,[to_email],fail_silently=True)
-        except BadHeaderError:
-            pass
+            try:
+                send_mail(subject,message,from_email,[to_email],fail_silently=True)
+                # print('mail sent')
+            except BadHeaderError:
+                pass
+
 
 
     def is_expired(self):

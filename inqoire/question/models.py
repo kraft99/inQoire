@@ -97,6 +97,12 @@ class Question(models.Model):
 
     def save(self,*args,**kwargs):
         super(Question,self).save(*args,**kwargs)
+
+
+    def get_absolute_url(self):
+        return reverse('question:question_detail',args=[str(self.slug)])
+
+    qst_detail_url = property(get_absolute_url)
     
 
     @property

@@ -427,6 +427,67 @@ ul li a.active-link{
 
 /*close Profile*/
 
+/* register and login */
+
+.mt--col{
+    margin-top:6em;
+    margin-bottom:2em;
+}
+
+.bck{
+    background-color:#ffffff
+}
+
+.sign-in-h4{
+    margin: 12px 0 .8em 0;
+    color: #5a5a5a;
+    font-style: normal;
+}
+
+.login-btn{
+    width:100%;
+    font-variant: petite-caps;
+    margin-bottom:.97em;
+}
+
+p{
+    display:inline-block;
+}
+
+.cpoy-right-text{
+    color: #b51212;
+    font-size: 12px;
+}
+
+.lock-icon{
+    text-align: center;
+    display: inherit;
+    height: 40px;
+    width: 40px;
+    margin: auto;
+    background: #b51212;
+    color: #fff;
+    line-height: 40px;
+    border-radius: 50%;
+    font-weight: bolder;
+    font-size: 21px;
+    margin-top: 10px;
+    box-sizing: border-box;
+}
+
+a{
+    color:#215184;
+}
+
+.default-social-icon{
+    width: 28px;
+    height: 28px;
+    background-color:#fff;
+    line-height: 28px;
+    border-radius: 50%;
+    box-shadow: 1px 1px 2px 1px rgba(0,0,0,0.11);
+}
+
 
 /*Spinner*/
 

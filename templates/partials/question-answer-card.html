@@ -25,7 +25,7 @@
 								  	  	{% endif %}
 								  	  	{% if q.text %}
 									    <h5 class="card-title">
-									    	{{q.text}}
+									    	<a href="{{q.qst_detail_url}}">{{q.text}}</a>
 									    </h5>
 									    {% endif %}
 								  	  	<p>By <a href="{{q.asked_by.url}}">{{q.asked_by.full_name}}</a>
@@ -35,6 +35,7 @@
 								  	  			<a href="{{q.most_upvote_answer.answer_by.url}}">{{q.most_upvote_answer.answer_by}}</a>
 								  	  		</span>
 								  	  	</p>
+								  	  	<br>
 								  	  	<p class="question-answers-count"><a href="#">({{q.answers_count}})</a> Answer{{q.answers_count|pluralize}} provided for this question.</p>
 									  </section>
 									    <!-- <img src="{% static 'img/qf.jpeg' %}" class="card-img-top question-file" alt="..."> -->

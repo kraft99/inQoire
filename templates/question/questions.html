@@ -75,9 +75,9 @@
 					    <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
 					  </div>
 					  <ul class="list-group list-group-flush clear-fix">
-					    <li class="list-group-item">Contributions<span class="badge badge-light float-right">9</span></li>
-					    <li class="list-group-item">Questions<span class="badge badge-light float-right">{{request.user.questions_count}}</span></li>
-					    <li class="list-group-item">Connections<span class="badge badge-light float-right">2</span></li>
+					    <li class="list-group-item">Contribution{{request.user.contribs.count|pluralize}}<span class="badge badge-light float-right">{{request.user.contribs.count}}</span></li>
+					    <li class="list-group-item">Question{{request.user.questions_count|pluralize}}<span class="badge badge-light float-right">{{request.user.questions_count}}</span></li>
+					    <li class="list-group-item">Connection{{request.user.people_connected_to_count|pluralize}}<span class="badge badge-light float-right">{{request.user.people_connected_to_count}}</span></li>
 					  </ul>
 
 					  <!-- {{answer_form}} -->
